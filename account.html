@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Summary - Bank of Boston</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <img src="icons/header_logo.png" alt="Bank of Boston Logo" class="header-logo">
+    <h1>Welcome, Account 74998264-Y-553902</h1>
+  </header>
+
+  <main class="account-container">
+    <section class="account-summary">
+      <h2>Account Overview</h2>
+      <p><strong>Status:</strong> Funds temporarily blocked due to federal investigation. <em>DC No. 3:28-cr-00741-TWR-2</em></p>
+      <canvas id="balanceChart"></canvas>
+    </section>
+
+    <section class="transactions">
+      <h2>Monthly Transfers (Jan 2019 - Dec 2024)</h2>
+      <table id="transferTable">
+        <thead>
+          <tr><th>Month</th><th>Amount (USD)</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <!-- Las filas se generarán dinámicamente con JS -->
+        </tbody>
+      </table>
+    </section>
+
+    <section class="actions">
+      <h2>Transfer Tools</h2>
+      <button id="transferBtn">Initiate Transfer</button>
+      <button id="reportBtn">View Annual Report</button>
+      <button id="exportBtn">Export CSV</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>Bank of Boston · 100 Federal St, Boston, MA · +1 (617) 555-1234</p>
+    <p>&copy; 2025 Bank of Boston. All rights reserved.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#003366" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png" />
+  <script defer src="app.js"></script>
+  <title>Bank of Boston - Login</title>
+</head>
+<body>
+  <header>
+    <img src="icons/header_logo.png" alt="Bank of Boston" class="header-logo" />
+    <h1>Bank of Boston</h1>
+  </header>
+
+  <main class="login-container">
+    <section class="login-box">
+      <h2>Account Login</h2>
+      <form action="account.html">
+        <label for="username">Username</label>
+        <input type="text" id="username" required />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" required />
+
+        <button type="submit">Login</button>
+      </form>
+      <div class="login-links">
+        <a href="#">Forgot Login?</a>
+        <a href="#">Test Your Browser</a>
+        <a href="#">Trouble Testing Your Browser</a>
+      </div>
+    </section>
+
+    <section class="bank-image">
+      <img src="icons/bank_building.jpg" alt="Bank Building" />
+    </section>
+  </main>
+
+  <section class="news-section">
+    <h3>Latest News</h3>
+    <ul>
+      <li><a href="https://www.wsj.com/finance/banking" target="_blank">U.S. Federal Reserve signals policy change</a></li>
+      <li><a href="https://www.bloomberg.com/markets/economics" target="_blank">Global inflation trends and impact on banking</a></li>
+      <li><a href="https://www.reuters.com/markets/us/" target="_blank">U.S. economic outlook 2025</a></li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Member FDIC | Equal Housing Lender | <strong>NCUA Insured</strong></p>
+    <p>Contact: +1 (617) 555-0199 | 100 Federal Street, Boston, MA</p>
+  </footer>
+</body>
+</html>
+
