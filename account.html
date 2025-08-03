@@ -1,50 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Account Summary - Bank of Boston</title>
+  <meta name="description" content="BankBoston - Banca en línea">
+  <title>BankBoston - Inicio de sesión</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Icono para iOS -->
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+  
+  <!-- Color de la barra de direcciones en Chrome para móviles -->
+  <meta name="theme-color" content="#003366">
 </head>
 <body>
   <header>
-    <img src="icons/header_logo.png" alt="Bank of Boston Logo" class="header-logo">
-    <h1>Welcome, Account 74998264-Y-553902</h1>
+    <img src="icons/icon-192x192.png" alt="BankBoston Logo" class="header-logo">
+    <h1>BankBoston</h1>
   </header>
 
-  <main class="account-container">
-    <section class="account-summary">
-      <h2>Account Overview</h2>
-      <p><strong>Status:</strong> Funds temporarily blocked due to federal investigation. <em>DC No. 3:28-cr-00741-TWR-2</em></p>
-      <canvas id="balanceChart"></canvas>
+  <main class="login-container">
+    <section class="login-form">
+      <h2>Iniciar sesión</h2>
+      <form id="loginForm">
+        <label for="username">Usuario</label>
+        <input type="text" id="username" name="username" required>
+        
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" required>
+        
+        <button type="submit">Ingresar</button>
+      </form>
+      
+      <div class="login-links">
+        <a href="#">¿Olvidaste tu contraseña?</a>
+        <a href="#">Registrarse</a>
+        <a href="#">Ayuda</a>
+      </div>
     </section>
-
-    <section class="transactions">
-      <h2>Monthly Transfers (Jan 2019 - Dec 2024)</h2>
-      <table id="transferTable">
-        <thead>
-          <tr><th>Month</th><th>Amount (USD)</th><th>Status</th></tr>
-        </thead>
-        <tbody>
-          <!-- Las filas se generarán dinámicamente con JS -->
-        </tbody>
-      </table>
-    </section>
-
-    <section class="actions">
-      <h2>Transfer Tools</h2>
-      <button id="transferBtn">Initiate Transfer</button>
-      <button id="reportBtn">View Annual Report</button>
-      <button id="exportBtn">Export CSV</button>
+    
+    <section class="login-image">
+      <img src="https://via.placeholder.com/600x400?text=BankBoston" alt="Sede BankBoston">
     </section>
   </main>
-
+  
+  <section class="news-section">
+    <h2>Noticias y Alertas</h2>
+    <ul>
+      <li><a href="#">Nuevos requisitos para transferencias internacionales</a></li>
+      <li><a href="#">Mantenimiento programado este fin de semana</a></li>
+      <li><a href="#">Conoce nuestras nuevas tarifas preferenciales</a></li>
+    </ul>
+  </section>
+  
   <footer>
-    <p>Bank of Boston · 100 Federal St, Boston, MA · +1 (617) 555-1234</p>
-    <p>&copy; 2025 Bank of Boston. All rights reserved.</p>
+    <p>© 2023 BankBoston. Todos los derechos reservados. | <a href="#">Términos y condiciones</a></p>
   </footer>
-
+  
   <script src="app.js"></script>
+  <script>
+    // Registrar el service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(registration => {
+            console.log('ServiceWorker registrado con éxito: ', registration.scope);
+          })
+          .catch(error => {
+            console.log('Error al registrar ServiceWorker: ', error);
+          });
+      });
+    }
+  </script>
 </body>
 </html>
