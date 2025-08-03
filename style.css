@@ -280,3 +280,44 @@ footer a:hover {
   }
 }
 
+/* Añadidos para PWA y mejoras móviles */
+
+/* Mejoras para instalación PWA */
+@media (display-mode: standalone) {
+  body {
+    overscroll-behavior-y: contain; /* Evita pull-to-refresh */
+  }
+  
+  header {
+    padding-top: max(20px, env(safe-area-inset-top));
+    padding-bottom: 15px;
+  }
+}
+
+/* Mejoras de usabilidad en móviles */
+button, input[type="submit"], input[type="button"] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Elementos interactivos más grandes en móviles */
+@media (max-width: 480px) {
+  .login-form button {
+    padding: 18px;
+    font-size: 1.2rem;
+  }
+  
+  .actions button {
+    padding: 15px 25px;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  
+  header {
+    padding: 15px 20px;
+  }
+  
+  h1 {
+    font-size: 1.7rem;
+  }
+}
