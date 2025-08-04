@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BankBoston - Acceso Seguro</title>
+    <title>BankBoston - Account Statement</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -28,615 +29,484 @@
         }
         
         body {
-            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            background-color: #f8f9fa;
+            color: var(--dark-gray);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .login-container {
-            width: 100%;
-            max-width: 1000px;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-wrap: wrap;
-            min-height: 70vh;
-        }
-        
-        .login-form-section {
-            flex: 1;
-            min-width: 300px;
-            padding: 40px;
-            background: var(--light-gray);
-            display: flex;
             flex-direction: column;
-            justify-content: center;
-            position: relative;
         }
         
-        .security-header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: var(--primary-blue);
+        /* Header */
+        header {
+            background-color: var(--primary-blue);
             color: white;
-            padding: 12px 20px;
+            padding: 20px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
-        .security-alert {
+        .header-left {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 20px;
         }
         
-        .security-alert i {
-            color: var(--accent-gold);
+        .header-logo {
+            height: 48px;
+            width: auto;
         }
         
-        .login-branding {
-            text-align: center;
-            margin: 30px 0 40px;
-        }
-        
-        .logo {
-            width: 90px;
-            height: 90px;
-            background: var(--primary-blue);
-            border-radius: 50%;
-            margin: 0 auto 15px;
+        .header-right {
             display: flex;
-            justify-content: center;
             align-items: center;
-            color: white;
-            font-size: 2.5rem;
-            box-shadow: 0 5px 15px rgba(0, 51, 102, 0.3);
+            gap: 15px;
         }
         
-        .login-branding h1 {
-            color: var(--primary-blue);
-            font-size: 2rem;
-            margin-bottom: 5px;
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
         }
         
-        .login-branding p {
-            color: var(--dark-gray);
-            font-size: 1rem;
-            opacity: 0.8;
-        }
-        
-        .form-group {
-            margin-bottom: 25px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--dark-gray);
+        .user-info .name {
             font-weight: 600;
-            font-size: 1rem;
-        }
-        
-        .input-with-icon {
-            position: relative;
-        }
-        
-        .input-with-icon i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary-blue);
-            font-size: 1.2rem;
-        }
-        
-        .input-with-icon input {
-            width: 100%;
-            padding: 15px 15px 15px 50px;
-            border: 2px solid var(--medium-gray);
-            border-radius: 10px;
             font-size: 1.1rem;
-            transition: all 0.3s ease;
         }
         
-        .input-with-icon input:focus {
-            border-color: var(--primary-blue);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0, 83, 158, 0.2);
+        .user-info .account {
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
         
-        .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: var(--dark-gray);
+        /* Main content */
+        .account-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            flex: 1;
         }
         
-        .remember-forgot {
+        .account-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-            font-size: 0.95rem;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--medium-gray);
         }
         
-        .remember {
-            display: flex;
-            align-items: center;
-        }
-        
-        .remember input {
-            margin-right: 8px;
-        }
-        
-        .forgot-password {
-            color: var(--secondary-blue);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .forgot-password:hover {
-            text-decoration: underline;
-        }
-        
-        .btn-login {
-            display: block;
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 83, 158, 0.4);
-        }
-        
-        .btn-login:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 83, 158, 0.6);
-        }
-        
-        .login-footer {
-            text-align: center;
-            margin-top: 30px;
-            color: var(--dark-gray);
-            font-size: 0.95rem;
-        }
-        
-        .login-footer a {
-            color: var(--secondary-blue);
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        .login-footer a:hover {
-            text-decoration: underline;
-        }
-        
-        .login-banner {
-            flex: 1;
-            min-width: 300px;
-            background: linear-gradient(rgba(0, 51, 102, 0.8), rgba(0, 26, 51, 0.9)), url('https://images.unsplash.com/photo-1601597111158-2fceff292cdc?ixlib=rb-4.0.3') center/cover;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 40px;
-            position: relative;
-        }
-        
-        .banner-content {
-            position: relative;
-            z-index: 2;
-        }
-        
-        .banner-content h2 {
+        .account-header h1 {
+            color: var(--primary-blue);
             font-size: 2rem;
-            margin-bottom: 20px;
-            line-height: 1.3;
         }
         
-        .banner-content p {
-            font-size: 1rem;
-            margin-bottom: 25px;
-            max-width: 500px;
-            line-height: 1.6;
-            opacity: 0.9;
-        }
-        
-        .features {
-            margin-top: 30px;
-        }
-        
-        .feature {
-            display: flex;
-            align-items: center;
-            margin-bottom: 18px;
-        }
-        
-        .feature i {
-            background: rgba(212, 175, 55, 0.2);
-            color: var(--accent-gold);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            margin-right: 12px;
-        }
-        
-        .feature-text h3 {
-            margin-bottom: 5px;
+        .account-header .period {
             font-size: 1.1rem;
+            font-weight: 600;
         }
         
-        .feature-text p {
-            font-size: 0.95rem;
-            margin: 0;
+        .account-summary {
+            background: var(--light-blue);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .summary-item {
+            text-align: center;
+        }
+        
+        .summary-item .value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+        }
+        
+        .summary-item .label {
+            font-size: 1rem;
+            color: var(--dark-gray);
             opacity: 0.8;
         }
         
-        .demo-credentials {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 30px;
-            backdrop-filter: blur(5px);
+        .chart-section {
+            margin-bottom: 40px;
         }
         
-        .demo-credentials h3 {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            font-size: 1.1rem;
-        }
-        
-        .demo-credentials h3 i {
-            margin-right: 10px;
-            color: var(--accent-gold);
-        }
-        
-        .credential {
-            display: flex;
-            margin-bottom: 10px;
-            font-size: 0.95rem;
-        }
-        
-        .credential-label {
-            min-width: 100px;
-            font-weight: 600;
-        }
-        
-        .alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            display: none;
-        }
-        
-        .alert.error {
-            background: rgba(192, 57, 43, 0.1);
-            border: 1px solid var(--error);
-            color: var(--error);
-        }
-        
-        .alert.warning {
-            background: rgba(243, 156, 18, 0.1);
-            border: 1px solid var(--warning);
-            color: var(--warning);
-        }
-        
-        .alert i {
-            margin-right: 10px;
-            font-size: 1.3rem;
-        }
-        
-        .attempts-counter {
-            text-align: right;
-            margin-bottom: 15px;
-            font-weight: 600;
-            color: var(--dark-gray);
-        }
-        
-        .lock-icon {
-            position: absolute;
-            top: 15px;
-            right: 20px;
+        .chart-section h2 {
+            margin-bottom: 20px;
             color: var(--primary-blue);
             font-size: 1.5rem;
         }
         
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+        
+        .transactions {
+            margin-bottom: 40px;
+        }
+        
+        .transactions h2 {
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            min-width: 700px;
+        }
+        
+        thead {
+            background-color: var(--light-blue);
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        th {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        
+        tbody tr:hover {
+            background-color: rgba(0, 83, 158, 0.03);
+        }
+        
+        .amount {
+            font-weight: 600;
+            color: var(--primary-blue);
+            text-align: right;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status.completed {
+            background-color: rgba(39, 174, 96, 0.1);
+            color: var(--success);
+        }
+        
+        .status.pending {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--warning);
+        }
+        
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 83, 158, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 83, 158, 0.4);
+        }
+        
+        .btn-outline {
+            background: white;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--light-blue);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--primary-blue);
+            color: white;
+            text-align: center;
+            padding: 18px 10px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            user-select: none;
+        }
+        
+        footer a {
+            color: var(--light-blue);
+            text-decoration: underline;
+        }
+        
+        footer a:hover {
+            color: white;
+        }
+        
+        /* Responsive */
         @media (max-width: 900px) {
-            .login-container {
+            .account-container {
+                padding: 25px;
+                margin: 20px;
+            }
+            
+            .account-header {
                 flex-direction: column;
-                min-height: auto;
+                align-items: flex-start;
+                gap: 15px;
             }
             
-            .login-banner {
-                order: -1;
-                padding: 30px;
+            .account-summary {
+                flex-direction: column;
+                gap: 25px;
+                align-items: stretch;
             }
             
-            .login-form-section {
-                padding: 30px;
+            .header-right {
+                display: none;
             }
         }
         
-        @media (max-width: 480px) {
-            .login-form-section {
-                padding: 20px;
-            }
-            
-            .login-banner {
-                padding: 20px;
-            }
-            
-            .remember-forgot {
+        @media (max-width: 600px) {
+            .actions {
                 flex-direction: column;
-                align-items: flex-start;
             }
             
-            .forgot-password {
-                margin-top: 10px;
+            .btn {
+                width: 100%;
             }
             
-            .security-header {
-                flex-direction: column;
-                gap: 5px;
-                padding: 8px;
-                font-size: 0.8rem;
+            header {
+                padding: 15px 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-form-section">
-            <div class="security-header">
-                <div class="security-alert">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Conexión segura SSL - 256-bit encryption</span>
-                </div>
-                <div class="security-alert">
-                    <i class="fas fa-lock"></i>
-                    <span>Sistema protegido por BankBoston Security</span>
-                </div>
+    <header>
+        <div class="header-left">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJ3aGl0ZSI+PHBhdGggZD0iTTEyIDBDNS4zNzMgMCAwIDUuMzczIDAgMTJzNS4zNzMgMTIgMTIgMTIgMTItNS4zNzMgMTItMTJTMTguNjI3IDAgMTIgMHptMCAyMmMtNS41MjMgMC0xMC00LjQ3Ny0xMC0xMHM0LjQ3Ny0xMCAxMC0xMCAxMCA0LjQ3NyAxMCAxMC00LjQ3NyAxMC0xMCAxMHptMC0xOGMtNC40MTEgMC04IDMuNTg5LTggOHMzLjU4OSA4IDggOCA4LTMuNTg5IDgtOC0zLjU4OS04LTgtOHptMCAxNGMtMy4zMTQgMC02LTIuNjg2LTYtNnMyLjY4Ni02IDYtNiA2IDIuNjg2IDYgNi0yLjY4NiA2LTYgNnptMC0xMGMtMi4yMDYgMC00IDEuNzk0LTQgNHMxLjc5NCA0IDQgNCA0LTEuNzk0IDQtNC0xLjc5NC00LTQtNHoiLz48L3N2Zz4=" alt="BankBoston Logo" class="header-logo">
+            <h1>BankBoston</h1>
+        </div>
+        <div class="header-right">
+            <div class="user-info">
+                <div class="name">John A. Smith</div>
+                <div class="account">Account #XXXX-4589</div>
             </div>
-            
-            <i class="fas fa-lock lock-icon"></i>
-            
-            <div class="login-branding">
-                <div class="logo">
-                    <i class="fas fa-university"></i>
-                </div>
-                <h1>BankBoston</h1>
-                <p>Acceso seguro a su banca en línea</p>
+            <button class="btn btn-outline" style="padding: 8px 15px;">Logout</button>
+        </div>
+    </header>
+
+    <div class="account-container">
+        <div class="account-header">
+            <h1>Monthly Payments Statement</h1>
+            <div class="period">January 2019 - December 2024</div>
+        </div>
+        
+        <div class="account-summary">
+            <div class="summary-item">
+                <div class="value">US$62,500</div>
+                <div class="label">Monthly Payment</div>
             </div>
-            
-            <div class="alert error" id="error-alert">
-                <i class="fas fa-exclamation-circle"></i>
-                <span id="error-message">Usuario o contraseña incorrectos</span>
+            <div class="summary-item">
+                <div class="value">72</div>
+                <div class="label">Payments</div>
             </div>
-            
-            <div class="alert warning" id="warning-alert">
-                <i class="fas fa-exclamation-triangle"></i>
-                <span id="warning-message">Solo te queda un intento</span>
-            </div>
-            
-            <div class="attempts-counter" id="attempts-counter">
-                Intentos restantes: <span id="attempts-left">3</span>
-            </div>
-            
-            <form id="login-form">
-                <div class="form-group">
-                    <label for="username">RUT (Usuario)</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-id-card"></i>
-                        <input type="text" id="username" placeholder="Ej: 12345678-9" required>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="password">Contraseña</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="password" placeholder="Ingrese su contraseña" required>
-                        <i class="fas fa-eye password-toggle" id="toggle-password"></i>
-                    </div>
-                </div>
-                
-                <div class="remember-forgot">
-                    <div class="remember">
-                        <input type="checkbox" id="remember">
-                        <label for="remember">Recordar RUT</label>
-                    </div>
-                    <a href="#" class="forgot-password">¿Olvidó su contraseña?</a>
-                </div>
-                
-                <button type="submit" class="btn-login" id="login-btn">Acceder a mi cuenta</button>
-            </form>
-            
-            <div class="login-footer">
-                <p>© 2023 BankBoston. Todos los derechos reservados.</p>
-                <p><a href="#">Política de seguridad</a> | <a href="#">Términos de uso</a></p>
+            <div class="summary-item">
+                <div class="value">US$4,500,000</div>
+                <div class="label">Total Amount</div>
             </div>
         </div>
         
-        <div class="login-banner">
-            <div class="banner-content">
-                <h2>Banca digital segura y conveniente</h2>
-                <p>Acceda a sus cuentas, realice transferencias, pague servicios y administre sus finanzas desde cualquier dispositivo.</p>
-                
-                <div class="features">
-                    <div class="feature">
-                        <i class="fas fa-shield-alt"></i>
-                        <div class="feature-text">
-                            <h3>Seguridad avanzada</h3>
-                            <p>Protección bancaria de nivel empresarial</p>
-                        </div>
-                    </div>
-                    
-                    <div class="feature">
-                        <i class="fas fa-mobile-alt"></i>
-                        <div class="feature-text">
-                            <h3>Acceso en cualquier lugar</h3>
-                            <p>Disponible 24/7 desde su dispositivo móvil</p>
-                        </div>
-                    </div>
-                    
-                    <div class="feature">
-                        <i class="fas fa-lightning-bolt"></i>
-                        <div class="feature-text">
-                            <h3>Operaciones instantáneas</h3>
-                            <p>Transacciones rápidas y sin complicaciones</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="demo-credentials">
-                    <h3><i class="fas fa-info-circle"></i> Credenciales de acceso</h3>
-                    <div class="credential">
-                        <div class="credential-label">Usuario:</div>
-                        <div>14136106-6</div>
-                    </div>
-                    <div class="credential">
-                        <div class="credential-label">Contraseña:</div>
-                        <div>funnforcummmfpk18943#</div>
-                    </div>
-                    <div class="credential">
-                        <div class="credential-label">Intento 1:</div>
-                        <div>Credenciales incorrectas</div>
-                    </div>
-                    <div class="credential">
-                        <div class="credential-label">Intento 2:</div>
-                        <div>Última oportunidad</div>
-                    </div>
-                </div>
+        <div class="chart-section">
+            <h2>Payment History</h2>
+            <div class="chart-container">
+                <canvas id="paymentChart"></canvas>
             </div>
         </div>
+        
+        <div class="transactions">
+            <h2>Monthly Payment Details</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Amount (USD)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentTableBody">
+                        <!-- Payments will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button class="btn btn-outline">
+                <i class="fas fa-download"></i> Download Statement
+            </button>
+            <button class="btn btn-primary">
+                <i class="fas fa-print"></i> Print Statement
+            </button>
+        </div>
     </div>
+    
+    <footer>
+        <p>© 2023 BankBoston. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        <p>BankBoston is a registered trademark of BankBoston Corporation. Member FDIC.</p>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Toggle password visibility
-            const togglePassword = document.getElementById('toggle-password');
-            const passwordInput = document.getElementById('password');
+            // Generate payment data
+            const payments = [];
+            const startDate = new Date(2019, 0); // January 2019
+            const endDate = new Date(2024, 11); // December 2024
+            const monthlyAmount = 62500;
             
-            togglePassword.addEventListener('click', function() {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                this.classList.toggle('fa-eye');
-                this.classList.toggle('fa-eye-slash');
+            let currentDate = new Date(startDate);
+            let totalAmount = 0;
+            let count = 0;
+            
+            while (currentDate <= endDate) {
+                const month = currentDate.toLocaleString('en-US', { month: 'long' });
+                const year = currentDate.getFullYear();
+                const formattedDate = `${month} ${year}`;
+                
+                payments.push({
+                    date: formattedDate,
+                    amount: monthlyAmount,
+                    status: 'completed'
+                });
+                
+                totalAmount += monthlyAmount;
+                count++;
+                
+                // Move to next month
+                currentDate.setMonth(currentDate.getMonth() + 1);
+            }
+            
+            // Populate table
+            const tableBody = document.getElementById('paymentTableBody');
+            payments.forEach(payment => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${payment.date}</td>
+                    <td>Monthly Payment</td>
+                    <td class="amount">${payment.amount.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
+                    <td><span class="status ${payment.status}">${payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}</span></td>
+                `;
+                tableBody.appendChild(row);
             });
             
-            // Handle form submission
-            const loginForm = document.getElementById('login-form');
-            const errorAlert = document.getElementById('error-alert');
-            const warningAlert = document.getElementById('warning-alert');
-            const attemptsCounter = document.getElementById('attempts-counter');
-            const attemptsLeft = document.getElementById('attempts-left');
-            const loginBtn = document.getElementById('login-btn');
-            
-            // Initialize attempts
-            let attempts = 3;
-            attemptsLeft.textContent = attempts;
-            
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
-                
-                // Valid credentials
-                const USER_VALID = '14136106-6';
-                const PASS_VALID = 'funnforcummmfpk18943#';
-                
-                // Check credentials
-                if (username === USER_VALID && password === PASS_VALID) {
-                    // Simulate successful login
-                    errorAlert.style.display = 'none';
-                    warningAlert.style.display = 'none';
-                    
-                    // Add loading effect to button
-                    loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
-                    loginBtn.disabled = true;
-                    
-                    // Redirect to account page after delay
-                    setTimeout(() => {
-                        window.location.href = 'account.html';
-                    }, 1500);
-                } else {
-                    // Decrement attempts
-                    attempts--;
-                    attemptsLeft.textContent = attempts;
-                    
-                    // Hide previous alerts
-                    errorAlert.style.display = 'none';
-                    warningAlert.style.display = 'none';
-                    
-                    // Check remaining attempts
-                    if (attempts <= 0) {
-                        // Block access
-                        errorAlert.style.display = 'flex';
-                        document.getElementById('error-message').textContent = 
-                            'Acceso bloqueado. Por favor contacte a soporte.';
-                        loginBtn.disabled = true;
-                        document.getElementById('username').disabled = true;
-                        document.getElementById('password').disabled = true;
-                        attemptsCounter.innerHTML = '<span style="color: var(--error)">Acceso bloqueado</span>';
-                    } else if (attempts === 1) {
-                        // Show warning for last attempt
-                        warningAlert.style.display = 'flex';
-                        document.getElementById('warning-message').textContent = 
-                            'Credenciales incorrectas. Solo te queda un intento.';
-                    } else {
-                        // Show error for incorrect credentials
-                        errorAlert.style.display = 'flex';
-                        document.getElementById('error-message').textContent = 
-                            'Credenciales incorrectas. Por favor, intente nuevamente.';
+            // Create chart
+            const ctx = document.getElementById('paymentChart').getContext('2d');
+            const paymentChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: payments.map(p => p.date),
+                    datasets: [{
+                        label: 'Monthly Payment',
+                        data: payments.map(p => p.amount),
+                        borderColor: '#003366',
+                        backgroundColor: 'rgba(0, 83, 158, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#00509e',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        tension: 0.1,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#003366',
+                            padding: 12,
+                            titleFont: {
+                                size: 14
+                            },
+                            bodyFont: {
+                                size: 14
+                            },
+                            callbacks: {
+                                label: function(context) {
+                                    return `Amount: ${context.parsed.y.toLocaleString('en-US', {style: 'currency', currency: 'USD'})`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                maxRotation: 0,
+                                autoSkip: true,
+                                maxTicksLimit: 12
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0,0,0,0.05)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
                     }
-                    
-                    // Shake animation for error
-                    loginForm.classList.add('shake');
-                    setTimeout(() => {
-                        loginForm.classList.remove('shake');
-                    }, 500);
                 }
             });
             
-            // Add shake animation to CSS
-            const style = document.createElement('style');
-            style.innerHTML = `
-                @keyframes shake {
-                    0%, 100% { transform: translateX(0); }
-                    20%, 60% { transform: translateX(-8px); }
-                    40%, 80% { transform: translateX(8px); }
-                }
-                
-                .shake {
-                    animation: shake 0.5s ease-in-out;
-                }
-            `;
-            document.head.appendChild(style);
+            // Update summary with actual calculated values
+            document.querySelector('.summary-item:nth-child(2) .value').textContent = count;
+            document.querySelector('.summary-item:nth-child(3) .value').textContent = 
+                totalAmount.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
         });
     </script>
 </body>
