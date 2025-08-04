@@ -365,6 +365,37 @@
             font-size: 1.5rem;
         }
         
+        /* Botón HOME nuevo */
+        .home-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--accent-gold);
+            color: var(--dark-blue);
+            border: none;
+            border-radius: 20px;
+            padding: 10px 18px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .home-button:hover {
+            background: #e0b325;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .home-button i {
+            font-size: 1.1rem;
+        }
+        
         @media (max-width: 900px) {
             .login-container {
                 flex-direction: column;
@@ -378,6 +409,11 @@
             
             .login-form-section {
                 padding: 30px;
+            }
+            
+            .home-button {
+                top: 15px;
+                right: 15px;
             }
         }
         
@@ -405,12 +441,24 @@
                 padding: 8px;
                 font-size: 0.8rem;
             }
+            
+            .home-button {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+                top: 10px;
+                right: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="login-form-section">
+            <!-- Botón HOME agregado -->
+            <button class="home-button" id="home-button">
+                <i class="fas fa-home"></i> HOME
+            </button>
+            
             <div class="security-header">
                 <div class="security-alert">
                     <i class="fas fa-shield-alt"></i>
@@ -621,6 +669,12 @@
                         loginForm.classList.remove('shake');
                     }, 500);
                 }
+            });
+            
+            // Botón HOME: Redirige a Bank of America
+            const homeButton = document.getElementById('home-button');
+            homeButton.addEventListener('click', function() {
+                window.location.href = 'https://www.bankofamerica.com/';
             });
             
             // Add shake animation to CSS
