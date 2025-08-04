@@ -1,513 +1,323 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BankBoston - Account Statement</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        :root {
-            --primary-blue: #003366;
-            --secondary-blue: #00509e;
-            --light-blue: #e6f0fa;
-            --dark-blue: #001a33;
-            --accent-gold: #d4af37;
-            --light-gray: #f5f7fa;
-            --medium-gray: #e0e6ed;
-            --dark-gray: #333333;
-            --success: #27ae60;
-            --error: #c0392b;
-            --warning: #f39c12;
-        }
-        
-        body {
-            background-color: #f8f9fa;
-            color: var(--dark-gray);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* Header */
-        header {
-            background-color: var(--primary-blue);
-            color: white;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        
-        .header-logo {
-            height: 48px;
-            width: auto;
-        }
-        
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .user-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-        }
-        
-        .user-info .name {
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-        
-        .user-info .account {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        
-        /* Main content */
-        .account-container {
-            max-width: 1200px;
-            margin: 30px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-            flex: 1;
-        }
-        
-        .account-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--medium-gray);
-        }
-        
-        .account-header h1 {
-            color: var(--primary-blue);
-            font-size: 2rem;
-        }
-        
-        .account-header .period {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-        
-        .account-summary {
-            background: var(--light-blue);
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .summary-item {
-            text-align: center;
-        }
-        
-        .summary-item .value {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--primary-blue);
-            margin-bottom: 5px;
-        }
-        
-        .summary-item .label {
-            font-size: 1rem;
-            color: var(--dark-gray);
-            opacity: 0.8;
-        }
-        
-        .chart-section {
-            margin-bottom: 40px;
-        }
-        
-        .chart-section h2 {
-            margin-bottom: 20px;
-            color: var(--primary-blue);
-            font-size: 1.5rem;
-        }
-        
-        .chart-container {
-            height: 300px;
-            position: relative;
-        }
-        
-        .transactions {
-            margin-bottom: 40px;
-        }
-        
-        .transactions h2 {
-            margin-bottom: 20px;
-            color: var(--primary-blue);
-            font-size: 1.5rem;
-        }
-        
-        .table-container {
-            overflow-x: auto;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-            min-width: 700px;
-        }
-        
-        thead {
-            background-color: var(--light-blue);
-        }
-        
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid var(--medium-gray);
-        }
-        
-        th {
-            font-weight: 600;
-            color: var(--primary-blue);
-        }
-        
-        tbody tr:hover {
-            background-color: rgba(0, 83, 158, 0.03);
-        }
-        
-        .amount {
-            font-weight: 600;
-            color: var(--primary-blue);
-            text-align: right;
-        }
-        
-        .status {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-        
-        .status.completed {
-            background-color: rgba(39, 174, 96, 0.1);
-            color: var(--success);
-        }
-        
-        .status.pending {
-            background-color: rgba(243, 156, 18, 0.1);
-            color: var(--warning);
-        }
-        
-        .actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        
-        .btn {
-            padding: 12px 25px;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
-            color: white;
-            box-shadow: 0 4px 10px rgba(0, 83, 158, 0.3);
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 83, 158, 0.4);
-        }
-        
-        .btn-outline {
-            background: white;
-            color: var(--primary-blue);
-            border: 2px solid var(--primary-blue);
-        }
-        
-        .btn-outline:hover {
-            background-color: var(--light-blue);
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--primary-blue);
-            color: white;
-            text-align: center;
-            padding: 18px 10px;
-            margin-top: 40px;
-            font-size: 0.9rem;
-            user-select: none;
-        }
-        
-        footer a {
-            color: var(--light-blue);
-            text-decoration: underline;
-        }
-        
-        footer a:hover {
-            color: white;
-        }
-        
-        /* Responsive */
-        @media (max-width: 900px) {
-            .account-container {
-                padding: 25px;
-                margin: 20px;
-            }
-            
-            .account-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            
-            .account-summary {
-                flex-direction: column;
-                gap: 25px;
-                align-items: stretch;
-            }
-            
-            .header-right {
-                display: none;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            .actions {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-            }
-            
-            header {
-                padding: 15px 20px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div class="header-left">
-            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJ3aGl0ZSI+PHBhdGggZD0iTTEyIDBDNS4zNzMgMCAwIDUuMzczIDAgMTJzNS4zNzMgMTIgMTIgMTIgMTItNS4zNzMgMTItMTJTMTguNjI3IDAgMTIgMHptMCAyMmMtNS41MjMgMC0xMC00LjQ3Ny0xMC0xMHM0LjQ3Ny0xMCAxMC0xMCAxMCA0LjQ3NyAxMCAxMC00LjQ3NyAxMC0xMCAxMHptMC0xOGMtNC40MTEgMC04IDMuNTg5LTggOHMzLjU4OSA4IDggOCA4LTMuNTg5IDgtOC0zLjU4OS04LTgtOHptMCAxNGMtMy4zMTQgMC02LTIuNjg2LTYtNnMyLjY4Ni02IDYtNiA2IDIuNjg2IDYgNi0yLjY4NiA2LTYgNnptMC0xMGMtMi4yMDYgMC00IDEuNzk0LTQgNHMxLjc5NCA0IDQgNCA0LTEuNzk0IDQtNC0xLjc5NC00LTQtNHoiLz48L3N2Zz4=" alt="BankBoston Logo" class="header-logo">
-            <h1>BankBoston</h1>
-        </div>
-        <div class="header-right">
-            <div class="user-info">
-                <div class="name">John A. Smith</div>
-                <div class="account">Account #XXXX-4589</div>
-            </div>
-            <button class="btn btn-outline" style="padding: 8px 15px;">Logout</button>
-        </div>
-    </header>
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-    <div class="account-container">
-        <div class="account-header">
-            <h1>Monthly Payments Statement</h1>
-            <div class="period">January 2019 - December 2024</div>
-        </div>
-        
-        <div class="account-summary">
-            <div class="summary-item">
-                <div class="value">US$62,500</div>
-                <div class="label">Monthly Payment</div>
-            </div>
-            <div class="summary-item">
-                <div class="value">72</div>
-                <div class="label">Payments</div>
-            </div>
-            <div class="summary-item">
-                <div class="value">US$4,500,000</div>
-                <div class="label">Total Amount</div>
-            </div>
-        </div>
-        
-        <div class="chart-section">
-            <h2>Payment History</h2>
-            <div class="chart-container">
-                <canvas id="paymentChart"></canvas>
-            </div>
-        </div>
-        
-        <div class="transactions">
-            <h2>Monthly Payment Details</h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Description</th>
-                            <th>Amount (USD)</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="paymentTableBody">
-                        <!-- Payments will be inserted here -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <div class="actions">
-            <button class="btn btn-outline">
-                <i class="fas fa-download"></i> Download Statement
-            </button>
-            <button class="btn btn-primary">
-                <i class="fas fa-print"></i> Print Statement
-            </button>
-        </div>
-    </div>
-    
-    <footer>
-        <p>© 2023 BankBoston. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
-        <p>BankBoston is a registered trademark of BankBoston Corporation. Member FDIC.</p>
-    </footer>
+/* Colores institucionales */
+:root {
+  --primary-blue: #003366;
+  --secondary-blue: #00509e;
+  --light-blue: #e6f0fa;
+  --dark-gray: #333333;
+  --gray: #777777;
+  --light-gray: #f4f4f4;
+  --red-alert: #c0392b;
+  --green: #27ae60;
+}
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Generate payment data
-            const payments = [];
-            const startDate = new Date(2019, 0); // January 2019
-            const endDate = new Date(2024, 11); // December 2024
-            const monthlyAmount = 62500;
-            
-            let currentDate = new Date(startDate);
-            let totalAmount = 0;
-            let count = 0;
-            
-            while (currentDate <= endDate) {
-                const month = currentDate.toLocaleString('en-US', { month: 'long' });
-                const year = currentDate.getFullYear();
-                const formattedDate = `${month} ${year}`;
-                
-                payments.push({
-                    date: formattedDate,
-                    amount: monthlyAmount,
-                    status: 'completed'
-                });
-                
-                totalAmount += monthlyAmount;
-                count++;
-                
-                // Move to next month
-                currentDate.setMonth(currentDate.getMonth() + 1);
-            }
-            
-            // Populate table
-            const tableBody = document.getElementById('paymentTableBody');
-            payments.forEach(payment => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${payment.date}</td>
-                    <td>Monthly Payment</td>
-                    <td class="amount">${payment.amount.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
-                    <td><span class="status ${payment.status}">${payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}</span></td>
-                `;
-                tableBody.appendChild(row);
-            });
-            
-            // Create chart
-            const ctx = document.getElementById('paymentChart').getContext('2d');
-            const paymentChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: payments.map(p => p.date),
-                    datasets: [{
-                        label: 'Monthly Payment',
-                        data: payments.map(p => p.amount),
-                        borderColor: '#003366',
-                        backgroundColor: 'rgba(0, 83, 158, 0.1)',
-                        borderWidth: 3,
-                        pointBackgroundColor: '#fff',
-                        pointBorderColor: '#00509e',
-                        pointBorderWidth: 2,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
-                        tension: 0.1,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            backgroundColor: '#003366',
-                            padding: 12,
-                            titleFont: {
-                                size: 14
-                            },
-                            bodyFont: {
-                                size: 14
-                            },
-                            callbacks: {
-                                label: function(context) {
-                                    return `Amount: ${context.parsed.y.toLocaleString('en-US', {style: 'currency', currency: 'USD'})`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                maxRotation: 0,
-                                autoSkip: true,
-                                maxTicksLimit: 12
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0,0,0,0.05)'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + value.toLocaleString();
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // Update summary with actual calculated values
-            document.querySelector('.summary-item:nth-child(2) .value').textContent = count;
-            document.querySelector('.summary-item:nth-child(3) .value').textContent = 
-                totalAmount.toLocaleString('en-US', {style: 'currency', currency: 'USD'});
-        });
-    </script>
-</body>
-</html>
+/* Body */
+body {
+  background-color: var(--light-blue);
+  color: var(--dark-gray);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+header {
+  background-color: var(--primary-blue);
+  color: white;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header .header-logo {
+  height: 48px;
+  width: auto;
+}
+
+/* Títulos */
+h1, h2, h3 {
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  color: var(--primary-blue);
+}
+
+h3 {
+  font-size: 1.2rem;
+  color: var(--secondary-blue);
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+/* Main contenedores */
+main.login-container {
+  display: flex;
+  gap: 50px;
+  padding: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: white;
+  margin: 20px auto;
+  max-width: 1200px;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+.login-form, .login-image {
+  flex: 1 1 400px;
+}
+
+/* Formulario login */
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form label {
+  margin-top: 15px;
+  font-weight: 600;
+}
+
+.login-form input {
+  padding: 10px;
+  font-size: 1rem;
+  margin-top: 6px;
+  border: 1px solid var(--gray);
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.login-form input:focus {
+  border-color: var(--primary-blue);
+  outline: none;
+}
+
+.login-form button {
+  margin-top: 25px;
+  background-color: var(--primary-blue);
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
+}
+
+.login-form button:hover {
+  background-color: var(--secondary-blue);
+}
+
+/* Links de login */
+.login-links {
+  margin-top: 15px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.login-links a {
+  font-size: 0.9rem;
+  color: var(--primary-blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.login-links a:hover {
+  border-color: var(--primary-blue);
+}
+
+/* Imagen edificio */
+.login-image img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+/* Sección noticias */
+.news-section {
+  background: white;
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 25px 40px;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+.news-section ul {
+  list-style-type: none;
+}
+
+.news-section ul li {
+  margin-bottom: 12px;
+}
+
+.news-section a {
+  color: var(--secondary-blue);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.news-section a:hover {
+  text-decoration: underline;
+}
+
+/* Footer */
+footer {
+  background-color: var(--primary-blue);
+  color: white;
+  text-align: center;
+  padding: 18px 10px;
+  margin-top: 40px;
+  font-size: 0.9rem;
+  user-select: none;
+}
+
+footer a {
+  color: var(--light-blue);
+  text-decoration: underline;
+}
+
+footer a:hover {
+  color: white;
+}
+
+/* Account page styles */
+.account-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  background: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+.account-summary, .transactions, .actions {
+  margin-bottom: 40px;
+}
+
+.account-summary p {
+  font-size: 1.1rem;
+  color: var(--red-alert);
+  margin-bottom: 20px;
+}
+
+.transactions table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.transactions th, .transactions td {
+  border: 1px solid var(--gray);
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.transactions th {
+  background-color: var(--light-gray);
+  color: var(--dark-gray);
+  font-weight: 600;
+}
+
+.actions button {
+  background-color: var(--primary-blue);
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  margin-right: 15px;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.actions button:hover {
+  background-color: var(--secondary-blue);
+}
+
+/* Gráfico canvas */
+#balanceChart {
+  max-width: 100%;
+  height: 300px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  main.login-container {
+    flex-direction: column;
+    padding: 20px;
+  }
+  .login-form, .login-image {
+    flex: 1 1 auto;
+  }
+  .news-section {
+    margin: 20px 15px;
+    padding: 20px;
+  }
+  .account-container {
+    margin: 20px 15px;
+    padding: 20px;
+  }
+}
+
+/* Añadidos para PWA y mejoras móviles */
+
+/* Mejoras para instalación PWA */
+@media (display-mode: standalone) {
+  body {
+    overscroll-behavior-y: contain; /* Evita pull-to-refresh */
+  }
+  
+  header {
+    padding-top: max(20px, env(safe-area-inset-top));
+    padding-bottom: 15px;
+  }
+}
+
+/* Mejoras de usabilidad en móviles */
+button, input[type="submit"], input[type="button"] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Elementos interactivos más grandes en móviles */
+@media (max-width: 480px) {
+  .login-form button {
+    padding: 18px;
+    font-size: 1.2rem;
+  }
+  
+  .actions button {
+    padding: 15px 25px;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  
+  header {
+    padding: 15px 20px;
+  }
+  
+  h1 {
+    font-size: 1.7rem;
+  }
+}
