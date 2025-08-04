@@ -1,323 +1,643 @@
-/* Reset básico */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BankBoston - Acceso Seguro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-blue: #003366;
+            --secondary-blue: #00509e;
+            --light-blue: #e6f0fa;
+            --dark-blue: #001a33;
+            --accent-gold: #d4af37;
+            --light-gray: #f5f7fa;
+            --medium-gray: #e0e6ed;
+            --dark-gray: #333333;
+            --success: #27ae60;
+            --error: #c0392b;
+            --warning: #f39c12;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-wrap: wrap;
+            min-height: 70vh;
+        }
+        
+        .login-form-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 40px;
+            background: var(--light-gray);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .security-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--primary-blue);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        
+        .security-alert {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .security-alert i {
+            color: var(--accent-gold);
+        }
+        
+        .login-branding {
+            text-align: center;
+            margin: 30px 0 40px;
+        }
+        
+        .logo {
+            width: 90px;
+            height: 90px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 2.5rem;
+            box-shadow: 0 5px 15px rgba(0, 51, 102, 0.3);
+        }
+        
+        .login-branding h1 {
+            color: var(--primary-blue);
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
+        .login-branding p {
+            color: var(--dark-gray);
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark-gray);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-blue);
+            font-size: 1.2rem;
+        }
+        
+        .input-with-icon input {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .input-with-icon input:focus {
+            border-color: var(--primary-blue);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 83, 158, 0.2);
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--dark-gray);
+        }
+        
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+        
+        .remember {
+            display: flex;
+            align-items: center;
+        }
+        
+        .remember input {
+            margin-right: 8px;
+        }
+        
+        .forgot-password {
+            color: var(--secondary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .btn-login {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 83, 158, 0.4);
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 83, 158, 0.6);
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--dark-gray);
+            font-size: 0.95rem;
+        }
+        
+        .login-footer a {
+            color: var(--secondary-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .login-banner {
+            flex: 1;
+            min-width: 300px;
+            background: linear-gradient(rgba(0, 51, 102, 0.8), rgba(0, 26, 51, 0.9)), url('https://images.unsplash.com/photo-1601597111158-2fceff292cdc?ixlib=rb-4.0.3') center/cover;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px;
+            position: relative;
+        }
+        
+        .banner-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .banner-content h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+        
+        .banner-content p {
+            font-size: 1rem;
+            margin-bottom: 25px;
+            max-width: 500px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .features {
+            margin-top: 30px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        
+        .feature i {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--accent-gold);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            margin-right: 12px;
+        }
+        
+        .feature-text h3 {
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+        
+        .feature-text p {
+            font-size: 0.95rem;
+            margin: 0;
+            opacity: 0.8;
+        }
+        
+        .demo-credentials {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .demo-credentials h3 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+        
+        .demo-credentials h3 i {
+            margin-right: 10px;
+            color: var(--accent-gold);
+        }
+        
+        .credential {
+            display: flex;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        
+        .credential-label {
+            min-width: 100px;
+            font-weight: 600;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            display: none;
+        }
+        
+        .alert.error {
+            background: rgba(192, 57, 43, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+        
+        .alert.warning {
+            background: rgba(243, 156, 18, 0.1);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+        }
+        
+        .alert i {
+            margin-right: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .attempts-counter {
+            text-align: right;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+        
+        .lock-icon {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+        }
+        
+        @media (max-width: 900px) {
+            .login-container {
+                flex-direction: column;
+                min-height: auto;
+            }
+            
+            .login-banner {
+                order: -1;
+                padding: 30px;
+            }
+            
+            .login-form-section {
+                padding: 30px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .login-form-section {
+                padding: 20px;
+            }
+            
+            .login-banner {
+                padding: 20px;
+            }
+            
+            .remember-forgot {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .forgot-password {
+                margin-top: 10px;
+            }
+            
+            .security-header {
+                flex-direction: column;
+                gap: 5px;
+                padding: 8px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-form-section">
+            <div class="security-header">
+                <div class="security-alert">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Conexión segura SSL - 256-bit encryption</span>
+                </div>
+                <div class="security-alert">
+                    <i class="fas fa-lock"></i>
+                    <span>Sistema protegido por BankBoston Security</span>
+                </div>
+            </div>
+            
+            <i class="fas fa-lock lock-icon"></i>
+            
+            <div class="login-branding">
+                <div class="logo">
+                    <i class="fas fa-university"></i>
+                </div>
+                <h1>BankBoston</h1>
+                <p>Acceso seguro a su banca en línea</p>
+            </div>
+            
+            <div class="alert error" id="error-alert">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="error-message">Usuario o contraseña incorrectos</span>
+            </div>
+            
+            <div class="alert warning" id="warning-alert">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span id="warning-message">Solo te queda un intento</span>
+            </div>
+            
+            <div class="attempts-counter" id="attempts-counter">
+                Intentos restantes: <span id="attempts-left">3</span>
+            </div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">RUT (Usuario)</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="username" placeholder="Ej: 12345678-9" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="Ingrese su contraseña" required>
+                        <i class="fas fa-eye password-toggle" id="toggle-password"></i>
+                    </div>
+                </div>
+                
+                <div class="remember-forgot">
+                    <div class="remember">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Recordar RUT</label>
+                    </div>
+                    <a href="#" class="forgot-password">¿Olvidó su contraseña?</a>
+                </div>
+                
+                <button type="submit" class="btn-login" id="login-btn">Acceder a mi cuenta</button>
+            </form>
+            
+            <div class="login-footer">
+                <p>© 2023 BankBoston. Todos los derechos reservados.</p>
+                <p><a href="#">Política de seguridad</a> | <a href="#">Términos de uso</a></p>
+            </div>
+        </div>
+        
+        <div class="login-banner">
+            <div class="banner-content">
+                <h2>Banca digital segura y conveniente</h2>
+                <p>Acceda a sus cuentas, realice transferencias, pague servicios y administre sus finanzas desde cualquier dispositivo.</p>
+                
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="feature-text">
+                            <h3>Seguridad avanzada</h3>
+                            <p>Protección bancaria de nivel empresarial</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature">
+                        <i class="fas fa-mobile-alt"></i>
+                        <div class="feature-text">
+                            <h3>Acceso en cualquier lugar</h3>
+                            <p>Disponible 24/7 desde su dispositivo móvil</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature">
+                        <i class="fas fa-lightning-bolt"></i>
+                        <div class="feature-text">
+                            <h3>Operaciones instantáneas</h3>
+                            <p>Transacciones rápidas y sin complicaciones</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-credentials">
+                    <h3><i class="fas fa-info-circle"></i> Credenciales de acceso</h3>
+                    <div class="credential">
+                        <div class="credential-label">Usuario:</div>
+                        <div>14136106-6</div>
+                    </div>
+                    <div class="credential">
+                        <div class="credential-label">Contraseña:</div>
+                        <div>funnforcummmfpk18943#</div>
+                    </div>
+                    <div class="credential">
+                        <div class="credential-label">Intento 1:</div>
+                        <div>Credenciales incorrectas</div>
+                    </div>
+                    <div class="credential">
+                        <div class="credential-label">Intento 2:</div>
+                        <div>Última oportunidad</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-/* Colores institucionales */
-:root {
-  --primary-blue: #003366;
-  --secondary-blue: #00509e;
-  --light-blue: #e6f0fa;
-  --dark-gray: #333333;
-  --gray: #777777;
-  --light-gray: #f4f4f4;
-  --red-alert: #c0392b;
-  --green: #27ae60;
-}
-
-/* Body */
-body {
-  background-color: var(--light-blue);
-  color: var(--dark-gray);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Header */
-header {
-  background-color: var(--primary-blue);
-  color: white;
-  padding: 20px 40px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-header .header-logo {
-  height: 48px;
-  width: auto;
-}
-
-/* Títulos */
-h1, h2, h3 {
-  margin-bottom: 16px;
-  font-weight: 700;
-}
-
-h1 {
-  font-size: 2rem;
-}
-
-h2 {
-  font-size: 1.5rem;
-  color: var(--primary-blue);
-}
-
-h3 {
-  font-size: 1.2rem;
-  color: var(--secondary-blue);
-  margin-top: 30px;
-  margin-bottom: 10px;
-}
-
-/* Main contenedores */
-main.login-container {
-  display: flex;
-  gap: 50px;
-  padding: 40px;
-  flex-wrap: wrap;
-  justify-content: center;
-  background: white;
-  margin: 20px auto;
-  max-width: 1200px;
-  border-radius: 8px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-}
-
-.login-form, .login-image {
-  flex: 1 1 400px;
-}
-
-/* Formulario login */
-.login-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.login-form label {
-  margin-top: 15px;
-  font-weight: 600;
-}
-
-.login-form input {
-  padding: 10px;
-  font-size: 1rem;
-  margin-top: 6px;
-  border: 1px solid var(--gray);
-  border-radius: 4px;
-  transition: border-color 0.3s ease;
-}
-
-.login-form input:focus {
-  border-color: var(--primary-blue);
-  outline: none;
-}
-
-.login-form button {
-  margin-top: 25px;
-  background-color: var(--primary-blue);
-  color: white;
-  border: none;
-  padding: 14px;
-  font-size: 1.1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: 700;
-  transition: background-color 0.3s ease;
-}
-
-.login-form button:hover {
-  background-color: var(--secondary-blue);
-}
-
-/* Links de login */
-.login-links {
-  margin-top: 15px;
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.login-links a {
-  font-size: 0.9rem;
-  color: var(--primary-blue);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.3s ease;
-}
-
-.login-links a:hover {
-  border-color: var(--primary-blue);
-}
-
-/* Imagen edificio */
-.login-image img {
-  width: 100%;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-}
-
-/* Sección noticias */
-.news-section {
-  background: white;
-  max-width: 1200px;
-  margin: 30px auto;
-  padding: 25px 40px;
-  border-radius: 8px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-}
-
-.news-section ul {
-  list-style-type: none;
-}
-
-.news-section ul li {
-  margin-bottom: 12px;
-}
-
-.news-section a {
-  color: var(--secondary-blue);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.news-section a:hover {
-  text-decoration: underline;
-}
-
-/* Footer */
-footer {
-  background-color: var(--primary-blue);
-  color: white;
-  text-align: center;
-  padding: 18px 10px;
-  margin-top: 40px;
-  font-size: 0.9rem;
-  user-select: none;
-}
-
-footer a {
-  color: var(--light-blue);
-  text-decoration: underline;
-}
-
-footer a:hover {
-  color: white;
-}
-
-/* Account page styles */
-.account-container {
-  max-width: 1200px;
-  margin: 30px auto;
-  background: white;
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-}
-
-.account-summary, .transactions, .actions {
-  margin-bottom: 40px;
-}
-
-.account-summary p {
-  font-size: 1.1rem;
-  color: var(--red-alert);
-  margin-bottom: 20px;
-}
-
-.transactions table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-
-.transactions th, .transactions td {
-  border: 1px solid var(--gray);
-  padding: 10px 12px;
-  text-align: left;
-}
-
-.transactions th {
-  background-color: var(--light-gray);
-  color: var(--dark-gray);
-  font-weight: 600;
-}
-
-.actions button {
-  background-color: var(--primary-blue);
-  color: white;
-  border: none;
-  padding: 12px 22px;
-  margin-right: 15px;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.actions button:hover {
-  background-color: var(--secondary-blue);
-}
-
-/* Gráfico canvas */
-#balanceChart {
-  max-width: 100%;
-  height: 300px;
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  main.login-container {
-    flex-direction: column;
-    padding: 20px;
-  }
-  .login-form, .login-image {
-    flex: 1 1 auto;
-  }
-  .news-section {
-    margin: 20px 15px;
-    padding: 20px;
-  }
-  .account-container {
-    margin: 20px 15px;
-    padding: 20px;
-  }
-}
-
-/* Añadidos para PWA y mejoras móviles */
-
-/* Mejoras para instalación PWA */
-@media (display-mode: standalone) {
-  body {
-    overscroll-behavior-y: contain; /* Evita pull-to-refresh */
-  }
-  
-  header {
-    padding-top: max(20px, env(safe-area-inset-top));
-    padding-bottom: 15px;
-  }
-}
-
-/* Mejoras de usabilidad en móviles */
-button, input[type="submit"], input[type="button"] {
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-
-/* Elementos interactivos más grandes en móviles */
-@media (max-width: 480px) {
-  .login-form button {
-    padding: 18px;
-    font-size: 1.2rem;
-  }
-  
-  .actions button {
-    padding: 15px 25px;
-    margin-bottom: 10px;
-    width: 100%;
-  }
-  
-  header {
-    padding: 15px 20px;
-  }
-  
-  h1 {
-    font-size: 1.7rem;
-  }
-}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle password visibility
+            const togglePassword = document.getElementById('toggle-password');
+            const passwordInput = document.getElementById('password');
+            
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+            
+            // Handle form submission
+            const loginForm = document.getElementById('login-form');
+            const errorAlert = document.getElementById('error-alert');
+            const warningAlert = document.getElementById('warning-alert');
+            const attemptsCounter = document.getElementById('attempts-counter');
+            const attemptsLeft = document.getElementById('attempts-left');
+            const loginBtn = document.getElementById('login-btn');
+            
+            // Initialize attempts
+            let attempts = 3;
+            attemptsLeft.textContent = attempts;
+            
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                // Valid credentials
+                const USER_VALID = '14136106-6';
+                const PASS_VALID = 'funnforcummmfpk18943#';
+                
+                // Check credentials
+                if (username === USER_VALID && password === PASS_VALID) {
+                    // Simulate successful login
+                    errorAlert.style.display = 'none';
+                    warningAlert.style.display = 'none';
+                    
+                    // Add loading effect to button
+                    loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
+                    loginBtn.disabled = true;
+                    
+                    // Redirect to account page after delay
+                    setTimeout(() => {
+                        window.location.href = 'account.html';
+                    }, 1500);
+                } else {
+                    // Decrement attempts
+                    attempts--;
+                    attemptsLeft.textContent = attempts;
+                    
+                    // Hide previous alerts
+                    errorAlert.style.display = 'none';
+                    warningAlert.style.display = 'none';
+                    
+                    // Check remaining attempts
+                    if (attempts <= 0) {
+                        // Block access
+                        errorAlert.style.display = 'flex';
+                        document.getElementById('error-message').textContent = 
+                            'Acceso bloqueado. Por favor contacte a soporte.';
+                        loginBtn.disabled = true;
+                        document.getElementById('username').disabled = true;
+                        document.getElementById('password').disabled = true;
+                        attemptsCounter.innerHTML = '<span style="color: var(--error)">Acceso bloqueado</span>';
+                    } else if (attempts === 1) {
+                        // Show warning for last attempt
+                        warningAlert.style.display = 'flex';
+                        document.getElementById('warning-message').textContent = 
+                            'Credenciales incorrectas. Solo te queda un intento.';
+                    } else {
+                        // Show error for incorrect credentials
+                        errorAlert.style.display = 'flex';
+                        document.getElementById('error-message').textContent = 
+                            'Credenciales incorrectas. Por favor, intente nuevamente.';
+                    }
+                    
+                    // Shake animation for error
+                    loginForm.classList.add('shake');
+                    setTimeout(() => {
+                        loginForm.classList.remove('shake');
+                    }, 500);
+                }
+            });
+            
+            // Add shake animation to CSS
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    20%, 60% { transform: translateX(-8px); }
+                    40%, 80% { transform: translateX(8px); }
+                }
+                
+                .shake {
+                    animation: shake 0.5s ease-in-out;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
